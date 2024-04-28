@@ -12,40 +12,23 @@ import LocalStrategy from "./middleware/localAuth.js";
 
 const app = express();
 
-// const allowedOrigins = ["https://manifest-tracker-client.fly.dev/", "http://localhost:5173"];
-
-// const corsOptions = {
-//   // origin: function (origin, callback) {
-//   //   if (!origin || allowedOrigins.includes(origin)) {
-//   //     callback(null, true);
-//   //   } else {
-//   //     callback(new Error("Not allowed by CORS"));
-//   //   }
-//   // },
-//   origin: "*",
-//   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-//   preflightContinue: false,
-//   credentials: true,
-//   optionsSuccessStatus: 200,
-// };
-// // CORS issues happening
-// app.use(cors(corsOptions));
-// app.options("*", cors(corsOptions));
-
-// See if this works
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", process.env.CLIENT);
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, PATCH, DELETE");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  next();
-});
+const corsOptions = {
+  origin: process.env.CLIENT,
+  credentials: true,
+  optionsSuccessStatus: 200,
+};
+// CORS issues happening
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 
 app.use(
   cookieSession({
     name: "auth",
     keys: [process.env.SECRET],
     maxAge: 60 * 60 * 24,
+    sameSite: "none",
+    secure: true,
+    httpOnly: true,
   })
 );
 app.use(express.json());
@@ -54,6 +37,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 passport.serializeUser((user, done) => {
+  console.log(`USER:${user.id}`);
   console.log(`4: Serialize user: ${JSON.stringify(user.id)}`);
   return done(null, user.id);
 });
@@ -66,7 +50,7 @@ passport.deserializeUser(async (id, done) => {
     if (!user) {
       return done(new Error("No user with id is found"));
     }
-
+    console.log(user.id, user.username);
     return done(null, { id: user.id, username: user.username });
   } catch (error) {
     console.log(error);
