@@ -70,7 +70,7 @@ const extractQuantity = async (buffer) => {
   try {
     const data = await pdf(buffer);
 
-    return data.text.match(/Qty:\d+.\d+/g);
+    return data.text.match(/\d+\.\d{3}/g);
   } catch (error) {
     return error;
   }
