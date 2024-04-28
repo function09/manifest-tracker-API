@@ -3,8 +3,6 @@ import bcrypt from "bcryptjs";
 import { findUser } from "../services/userDatabaseFunctions.js";
 
 const LocalStrategy = new Strategy(async (username, password, done) => {
-  console.log(`2: Local strategy verify cb: ${JSON.stringify({ username })}`);
-
   // This is where we call the db to verify user
   const user = await findUser(username);
 

@@ -21,11 +21,13 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.options("*", cors(corsOptions));
 
+app.set("trust proxy", 1);
+
 app.use(
   cookieSession({
     name: "auth",
     keys: [process.env.SECRET],
-    maxAge: 60 * 60 * 24,
+    maxAge: 24 * 60 * 60 * 1000,
     sameSite: "none",
     secure: true,
     httpOnly: true,
@@ -36,25 +38,17 @@ app.use(express.json());
 app.use(passport.initialize());
 app.use(passport.session());
 
-passport.serializeUser((user, done) => {
-  console.log(`USER:${user.id}`);
-  console.log(`4: Serialize user: ${JSON.stringify(user.id)}`);
-  return done(null, user.id);
-});
+passport.serializeUser((user, done) => done(null, user.id));
 
 passport.deserializeUser(async (id, done) => {
-  console.log(`5: Deserializing user:${id}`);
   try {
     const user = await User.findById(id);
 
     if (!user) {
       return done(new Error("No user with id is found"));
     }
-    console.log(user.id, user.username);
     return done(null, { id: user.id, username: user.username });
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 });
 
 passport.use("local", LocalStrategy);

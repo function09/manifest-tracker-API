@@ -1,9 +1,9 @@
-# fly.toml app configuration file generated for manifest-tracker-api-delicate-fog-249 on 2024-04-28T00:07:06-04:00
+# fly.toml app configuration file generated for manifest-tracker-api on 2024-04-28T13:26:03-04:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'manifest-tracker-api-delicate-fog-249'
+app = 'manifest-tracker-api'
 primary_region = 'atl'
 
 [build]

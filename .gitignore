@@ -1,3 +1,5 @@
 node_modules
 .env
-/populateDB.js
+Dockerfile
+fly.toml
+.dockerignore

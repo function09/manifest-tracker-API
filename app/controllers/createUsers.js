@@ -1,4 +1,3 @@
-import { body, validationResult } from "express-validator";
 import { createUser, userExists } from "../services/userDatabaseFunctions.js";
 
 const createUserController = async (req, res) => {
