@@ -17,7 +17,7 @@ const corsOptions = {
   credentials: true,
   optionsSuccessStatus: 200,
 };
-// CORS issues happening
+
 app.use(cors(corsOptions));
 app.options("*", cors(corsOptions));
 
